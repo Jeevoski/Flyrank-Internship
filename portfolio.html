@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeeva — ML Engineer & Data Analyst</title>
+    <meta name="description" content="Portfolio of Jeeva — turning raw search and product data into automated, predictive strategies that protect and grow engagement.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0f;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --glass: rgba(255,255,255,0.04);
+            --border: rgba(255,255,255,0.08);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient blobs */
+        .blob { position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.18; pointer-events: none; z-index: 0; }
+        .blob-1 { width: 600px; height: 600px; background: var(--primary); top: -200px; left: -200px; }
+        .blob-2 { width: 500px; height: 500px; background: var(--accent); bottom: -150px; right: -150px; }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            backdrop-filter: blur(20px);
+            background: rgba(10,10,15,0.7);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700; font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            text-align: center; padding: 6rem 2rem 4rem;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.4rem 1rem; border-radius: 99px;
+            margin-bottom: 2rem;
+            animation: fadeUp 0.6s ease both;
+        }
+        .hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 800; line-height: 1.05;
+            letter-spacing: -0.03em;
+            animation: fadeUp 0.7s 0.1s ease both;
+        }
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-claim {
+            max-width: 640px;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: var(--muted); line-height: 1.7;
+            margin: 1.5rem auto 0;
+            animation: fadeUp 0.7s 0.2s ease both;
+        }
+        .hero-ctas {
+            display: flex; gap: 1rem; flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2.5rem;
+            animation: fadeUp 0.7s 0.3s ease both;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff; text-decoration: none;
+            padding: 0.85rem 2rem; border-radius: 12px;
+            font-weight: 600; font-size: 0.95rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 24px rgba(99,102,241,0.35);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.5); }
+        .btn-ghost {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            color: var(--text); text-decoration: none;
+            padding: 0.85rem 2rem; border-radius: 12px;
+            font-weight: 600; font-size: 0.95rem;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.08); transform: translateY(-2px); }
+
+        /* Scroll indicator */
+        .scroll-hint {
+            position: absolute; bottom: 2rem;
+            display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+            color: var(--muted); font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase;
+            animation: bounce 2s infinite;
+        }
+        .scroll-hint svg { opacity: 0.5; }
+
+        /* Work section */
+        .section { position: relative; z-index: 1; padding: 6rem 2rem; max-width: 900px; margin: 0 auto; }
+        .section-label {
+            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--primary); margin-bottom: 1rem;
+        }
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700; letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+        .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 540px; }
+
+        /* Case card */
+        .case-card {
+            margin-top: 3rem;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem 2.5rem;
+            transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+            text-decoration: none; color: inherit; display: block;
+        }
+        .case-card:hover {
+            border-color: rgba(99,102,241,0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 48px rgba(99,102,241,0.15);
+        }
+        .case-tag {
+            display: inline-block; font-size: 0.72rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.3rem 0.75rem; border-radius: 99px;
+            background: rgba(99,102,241,0.15); color: var(--primary);
+            border: 1px solid rgba(99,102,241,0.3);
+            margin-bottom: 1rem;
+        }
+        .case-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.35rem; font-weight: 700; margin-bottom: 0.6rem;
+        }
+        .case-card p { color: var(--muted); font-size: 0.95rem; line-height: 1.65; }
+        .case-arrow {
+            margin-top: 1.5rem; color: var(--primary);
+            font-size: 0.85rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+
+        /* Coming soon card */
+        .case-card.soon { opacity: 0.5; cursor: default; }
+        .case-card.soon:hover { transform: none; box-shadow: none; }
+
+        /* Footer */
+        footer {
+            position: relative; z-index: 1;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 2rem;
+            color: var(--muted); font-size: 0.85rem;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(6px); }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            .case-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <nav>
+        <span class="nav-logo">[ J. ]</span>
+        <ul class="nav-links">
+            <li><a href="#work">Work</a></li>
+            <li><a href="index.html">Capstone Paper</a></li>
+            <li><a href="https://github.com/Jeevoski" target="_blank">GitHub</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-badge">ML Engineer · Data Analyst · FlyRank Intern</div>
+        <h1>I turn data into<br><span>decisions that scale.</span></h1>
+        <p class="hero-claim">I turn raw search and product data into automated, predictive strategies that directly protect and grow engagement.</p>
+        <div class="hero-ctas">
+            <a href="#work" class="btn-primary">View My Work</a>
+            <a href="index.html" class="btn-ghost">Read the Research Paper</a>
+        </div>
+        <div class="scroll-hint">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+            scroll
+        </div>
+    </section>
+
+    <div class="section" id="work">
+        <div class="section-label">Selected Work</div>
+        <h2 class="section-title">Case Studies</h2>
+        <p class="section-sub">Projects built on real data, validated honestly, shipped publicly.</p>
+
+        <a href="index.html" class="case-card">
+            <div class="case-tag">ML · Search Intelligence</div>
+            <h3>FlyRank Search Ranking & Discoverability</h3>
+            <p>Built a Refresh Opportunity Scoring model on 79M+ rows of real GSC + GA4 warehouse data. Random Forest model identifies stale, high-impression content with low CTR and generates an automated action playbook with reason codes.</p>
+            <div class="case-arrow">Read the full research paper →</div>
+        </a>
+
+        <div class="case-card soon">
+            <div class="case-tag">ML · Customer Intelligence</div>
+            <h3>Predictive Customer Churn Analysis</h3>
+            <p>Coming soon — a model identifying high-risk subscribers and triggering automated retention workflows.</p>
+        </div>
+    </div>
+
+    <footer>
+        Built with intention · Identity Kit: Outfit + Inter · <a href="https://flyrank.ai" target="_blank" style="color:var(--primary);text-decoration:none;">FlyRank ML Internship</a>
+    </footer>
+</body>
+</html>
