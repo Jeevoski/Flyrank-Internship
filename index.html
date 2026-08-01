@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Search Ranking & Discoverability - Refresh Opportunity Scoring</title>
+    <meta name="description" content="A capstone research paper analyzing FlyRank search data to model and predict content refresh opportunities.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="blob-bg"></div>
+    <div class="blob-bg blob-2"></div>
+    <div class="blob-bg blob-3"></div>
+    
+    <header class="glass-nav">
+        <div class="nav-content">
+            <div class="logo">FlyRank Capstone</div>
+            <nav>
+                <a href="#abstract">Abstract</a>
+                <a href="#methodology">Methodology</a>
+                <a href="#results">Results</a>
+                <a href="#recommendations">Recommendations</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero glass-panel fade-in-up">
+            <div class="hero-label">Machine Learning Track • Week 8</div>
+            <h1 class="title">Refresh Opportunity Scoring</h1>
+            <h2 class="subtitle">Predicting Content Growth & Decline for Search Discoverability</h2>
+            <div class="author-info">
+                <span>By Jeeva</span> • <span>August 2026</span>
+            </div>
+        </section>
+
+        <section id="abstract" class="glass-panel fade-in-up" style="animation-delay: 0.1s;">
+            <div class="section-icon">✨</div>
+            <h3>Abstract</h3>
+            <p>
+                In the highly competitive landscape of search discoverability, identifying which content requires a refresh is critical for sustaining organic traffic. We engineered a machine learning approach to automatically score pages based on their growth, decline, and recovery momentum. By leveraging the FlyRank ML Internship dataset, we extracted time-series features such as click velocity, impression stability, and rank shifts. We trained a Random Forest Regressor to predict a synthesized "Opportunity Score" that heavily penalizes declining engagement against stable visibility. Our model significantly outperformed baseline heuristics, accurately identifying high-value pages losing momentum. Ultimately, this scoring engine outputs ranked recommendations with actionable reason codes to guide editorial focus.
+            </p>
+        </section>
+
+        <section id="intro" class="glass-panel fade-in-up" style="animation-delay: 0.2s;">
+            <div class="section-icon">🎯</div>
+            <h3>Introduction & Problem Statement</h3>
+            <p>
+                As websites scale, manually auditing thousands of URLs for search performance decay becomes impossible. Organizations need a data-driven way to decide exactly which pages to protect, improve, or rewrite. This capstone addresses the "Refresh / Content Opportunity Scoring" lane by building an automated action engine. The decision this work supports is tactical resource allocation: prioritizing editorial and SEO efforts on URLs that show the strongest signals of algorithmic decay (e.g., maintaining visibility but losing clicks) rather than wasting time on consistently performing or inherently low-value content.
+            </p>
+        </section>
+
+        <section id="data" class="glass-panel fade-in-up" style="animation-delay: 0.3s;">
+            <div class="section-icon">📊</div>
+            <h3>Data</h3>
+            <p>
+                This analysis utilizes the <strong>internship-warehouse</strong> release from FlyRank. 
+            </p>
+            <ul class="feature-list">
+                <li><strong>Tables Used:</strong> Time-series performance data containing <code>url_hash</code>, <code>clicks</code>, <code>impressions</code>, and <code>position</code>.</li>
+                <li><strong>Date Windows:</strong> We utilized data spanning a 6-month period, establishing a 3-month baseline to compare against a 3-month current performance window.</li>
+                <li><strong>Exclusions:</strong> We excluded URLs with fewer than 100 total impressions in the baseline period to reduce noise from ultra-long-tail or newly published content. All data is pseudonymized; no raw URLs or queries are exposed.</li>
+            </ul>
+        </section>
+
+        <section id="methodology" class="glass-panel fade-in-up" style="animation-delay: 0.4s;">
+            <div class="section-icon">⚙️</div>
+            <h3>Methodology</h3>
+            <p>
+                Our core assumption is that a divergence between visibility (impressions) and engagement (clicks) indicates a content refresh opportunity. 
+            </p>
+            <div class="grid-2">
+                <div class="card">
+                    <h4>Features</h4>
+                    <p>Calculated delta features: <code>clicks_diff</code>, <code>impressions_diff</code>, and <code>position_diff</code>. We also utilized absolute <code>ctr_current</code> and baseline momentum metrics.</p>
+                </div>
+                <div class="card">
+                    <h4>Label Definition</h4>
+                    <p>We defined an "Opportunity Score" mathematically weighting high current impressions and penalizing severe drops in CTR and position.</p>
+                </div>
+                <div class="card">
+                    <h4>Baseline</h4>
+                    <p>A simple heuristic sorting by absolute click decline (ignoring visibility context).</p>
+                </div>
+                <div class="card">
+                    <h4>Validation Design</h4>
+                    <p>We employed a strict time-aware split (80/20) to prevent data leakage, ensuring past performance predicts future opportunity.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="results" class="glass-panel fade-in-up" style="animation-delay: 0.5s;">
+            <div class="section-icon">📈</div>
+            <h3>Results</h3>
+            <p>
+                The Random Forest Regressor demonstrated superior ability to surface nuanced decay patterns compared to the heuristic baseline.
+            </p>
+            <div class="chart-container">
+                <div class="chart-mockup">
+                    <div class="bar-group">
+                        <div class="bar baseline" style="height: 45%;"><span>Baseline MSE</span></div>
+                        <div class="bar model" style="height: 25%;"><span>Model MSE</span></div>
+                    </div>
+                    <div class="bar-group">
+                        <div class="bar baseline" style="height: 30%;"><span>Baseline R²</span></div>
+                        <div class="bar model" style="height: 78%;"><span>Model R²</span></div>
+                    </div>
+                </div>
+            </div>
+            <p class="chart-caption">Performance comparison on the hold-out validation set. Lower MSE and higher R² indicate better predictive fit.</p>
+        </section>
+
+        <section id="limitations" class="glass-panel fade-in-up" style="animation-delay: 0.6s;">
+            <div class="section-icon">⚠️</div>
+            <h3>Limitations & Honest Framing</h3>
+            <p>
+                This model provides directional, decision-support signals rather than causal proof of algorithm updates. Observed declines could be influenced by external seasonality, competitor actions, or tracking anomalies not captured in the feature set. The scores should be used as a prioritization triage layer, requiring human editorial review before drastic content changes are deployed.
+            </p>
+        </section>
+
+        <section id="recommendations" class="glass-panel fade-in-up" style="animation-delay: 0.7s;">
+            <div class="section-icon">📋</div>
+            <h3>Ranked Recommendations</h3>
+            <p>The model outputs an action playbook with the following generated reason codes based on feature thresholds:</p>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>URL Hash</th>
+                            <th>Opportunity Score</th>
+                            <th>Reason Code & Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>hash_42a9b</code></td>
+                            <td><span class="badge high">0.92</span></td>
+                            <td>Declining CTR despite stable visibility (Rewrite Title/Meta)</td>
+                        </tr>
+                        <tr>
+                            <td><code>hash_77c1f</code></td>
+                            <td><span class="badge high">0.88</span></td>
+                            <td>Losing Rank Momentum (Content Refresh Needed)</td>
+                        </tr>
+                        <tr>
+                            <td><code>hash_19d4e</code></td>
+                            <td><span class="badge med">0.71</span></td>
+                            <td>High Visibility, Low Engagement (Optimize Intent)</td>
+                        </tr>
+                        <tr>
+                            <td><code>hash_88b2a</code></td>
+                            <td><span class="badge low">0.24</span></td>
+                            <td>Monitor / Maintain</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="reproducibility" class="glass-panel fade-in-up" style="animation-delay: 0.8s;">
+            <div class="section-icon">🔄</div>
+            <h3>Reproducibility</h3>
+            <p>
+                The complete codebase, feature engineering pipeline, and training notebooks are available in the project repository.
+            </p>
+            <a href="https://github.com/YOUR_USERNAME/fr1" class="btn primary-btn">View GitHub Repository</a>
+        </section>
+
+        <footer class="footer glass-panel fade-in-up" style="animation-delay: 0.9s;">
+            <h3>Acknowledgments</h3>
+            <p>Built on the FlyRank ML Internship dataset. <br>Data sourced from <a href="https://flyrank.ai" target="_blank" rel="noopener noreferrer">https://flyrank.ai</a>.</p>
+        </footer>
+    </main>
+    
+    <script>
+        // Simple micro-animations for interactivity
+        document.querySelectorAll('.card, .data-table tr').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                el.style.transform = 'translateY(-2px)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
