@@ -1,0 +1,13 @@
+{
+  "total_rows": 3608,
+  "flagged_refresh": 882,
+  "flag_rate_pct": 24.45,
+  "weak_picks": 0,
+  "leakage_found": [],
+  "features_used": [
+    "stale_flag",
+    "ctr_gap_flag",
+    "imp_norm"
+  ],
+  "lane": "Refresh / Content Opportunity Scoring"
+}
